@@ -1,28 +1,58 @@
 import pygame
 import os
-
+import math 
 class Bird:
-    def __init__(self):
+    def __init__(self, WIDTH, HEIGHT, limit_height):
         # Carga las imágenes (sprites) desde la carpeta
         sprite1 = pygame.image.load(os.path.join(sprites_folder_bird, "bird1.png"))
         sprite2 = pygame.image.load(os.path.join(sprites_folder_bird, "bird2.png"))
         sprite3 = pygame.image.load(os.path.join(sprites_folder_bird, "bird3.png"))
 
         # Factor de escala para el sprite (puedes ajustar este valor)
-        factor_de_escala = 3  # Por ejemplo, aumenta el tamaño en un 50%
+        factor_de_escala = 3  # Por ejemplo, aumenta el tamaño en un 300%
 
         # Redimensiona las imágenes en función del factor de escala
         sprite1 = pygame.transform.scale(sprite1, (int(sprite1.get_width() * factor_de_escala), int(sprite1.get_height() * factor_de_escala)))
         sprite2 = pygame.transform.scale(sprite2, (int(sprite2.get_width() * factor_de_escala), int(sprite2.get_height() * factor_de_escala)))
         sprite3 = pygame.transform.scale(sprite3, (int(sprite3.get_width() * factor_de_escala), int(sprite3.get_height() * factor_de_escala)))
 
-        self.sprites = [sprite1, sprite2, sprite3]
+        self.sprites = [sprite1, sprite2, sprite3]  #Sprites que logran la animacion
         self.current_sprite = 0
         self.animation_speed = 100  # Velocidad inicial (en milisegundos)
         self.last_frame_time = pygame.time.get_ticks()  # Tiempo del último cambio de cuadro
-    
-    #Realiza la animcacion de los sprites
-    def animate_bird(self):
+        self.sprite_width, self.sprite_height = self.sprites[self.current_sprite].get_size() 
+        self.x = (WIDTH - self.sprite_width) // 2  # Centra horizontalmente
+        self.y = (HEIGHT - self.sprite_height) // 2  # Centra verticalmente
+        
+        ####Cosas añadidas
+        self.y_velocity = 0  # Velocidad vertical inicial
+        self.gravity = 0.4  # Valor de la gravedad, puedes ajustarlo según tus necesidades"""
+        self.angle = 0  # Ángulo inicial
+        self.current_angle = 0 
+        self.bottom_limit = HEIGHT-limit_height-self.sprite_height  # Define el límite inferior de la pantalla
+        
+        
+    ### añadido
+    def jump(self):
+        # Esta función se llama cuando el pájaro salta  # Cambia la velocidad vertical hacia arriba al saltar
+        if self.y > self.sprite_height//4:
+            self.y_velocity = -9.5
+
+    #Se actualiza en el bucle principal
+    def update(self):
+        """
+        ### añadido
+        self.y_velocity += self.gravity  # Aplica la gravedad
+        self.y += self.y_velocity  # Actualiza la posición vertical"""
+
+        # Verifica si el pájaro superaría la altura del suelo en el próximo movimiento hacia abajo
+        if self.y + self.y_velocity > self.bottom_limit:
+            self.y = self.bottom_limit  # Establece la posición del pájaro en la altura del suelo
+        else:
+            ### añadido
+            self.y_velocity += self.gravity  # Aplica la gravedad
+            self.y += self.y_velocity  # Actualiza la posición vertical
+        ### Carga de sprites (animacion)
         current_time = pygame.time.get_ticks()
         if current_time - self.last_frame_time >= self.animation_speed:
             self.current_sprite += 1
@@ -30,15 +60,23 @@ class Bird:
                 self.current_sprite = 0
             self.last_frame_time = current_time
 
+        # Calcula el ángulo en función de la velocidad vertical
+        if self.y_velocity < 0: 
+            if self.current_angle < 15:
+                self.current_angle += 2
+                self.angle = self.current_angle  # Límite máximo hacia abajo
+        else:
+            if self.current_angle > -15:
+                self.current_angle -= 2.5
+                self.angle = self.current_angle  # Límite máximo hacia abajo
+
 # Ruta de la carpeta de sprites
 sprites_folder_bird = "sprites/bird"
 
-# Inicializa Pygame
-pygame.init()
-
+"""
 # Crea una instancia de la clase Bird
 bird = Bird()
-
+"""
 """
 import pygame
 import os

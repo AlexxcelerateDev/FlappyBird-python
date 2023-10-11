@@ -1,7 +1,7 @@
 import pygame
 import sys
 import os
-from bird import bird
+from bird import Bird
 from background import Background
 from underground import Underground
 
@@ -26,6 +26,11 @@ background = Background(WIDTH, HEIGHT, scroll_speed)
 scroll_speed_underground = scroll_speed *5
 underground = Underground(WIDTH, HEIGHT, scroll_speed_underground)
 
+bird = Bird(WIDTH, HEIGHT, underground.height)
+
+# Crea una instancia de la clase Bird
+
+
 # Bucle principal del juego
 running = True
 clock = pygame.time.Clock()
@@ -33,6 +38,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                bird.jump()  # Llama al método jump cuando se presiona la tecla espacio
+
 
     # Lógica del juego
 
@@ -41,25 +51,22 @@ while running:
     screen.fill(WHITE)
     
     # Lógica de animación
-    bird.animate_bird()
+    bird.update()
     background.update()
     underground.update()
     ####
-    # Calcula las coordenadas para centrar el sprite
-    sprite_width, sprite_height = bird.sprites[bird.current_sprite].get_size()
-    x = (WIDTH - sprite_width) // 2  # Centra horizontalmente
-    y = (HEIGHT - sprite_height) // 2  # Centra verticalmente
 
-    
     # Dibuja el fondo
     background.draw(screen)
     underground.draw(screen, HEIGHT)
 
     # Dibuja el sprite actual en la ventana
-    screen.blit(bird.sprites[bird.current_sprite], (x, y))
-
+    # Rota el objeto en función del ángulo
+    rotated_bird = pygame.transform.rotate(bird.sprites[bird.current_sprite], bird.angle)
+    new_rect = rotated_bird.get_rect(center=(bird.x, bird.y))
+    screen.blit(rotated_bird, new_rect.center)
     # Dibuja otros elementos aquí
-
+    
     pygame.display.flip()
     clock.tick(60)
 
