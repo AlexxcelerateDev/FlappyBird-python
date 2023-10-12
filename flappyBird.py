@@ -4,7 +4,7 @@ import os
 from bird import Bird
 from background import Background
 from underground import Underground
-
+from pipeline import Pipeline
 # Inicializar Pygame
 pygame.init()
 
@@ -25,7 +25,7 @@ background = Background(WIDTH, HEIGHT, scroll_speed)
 # Crea una instancia de la clase Underground
 scroll_speed_underground = scroll_speed *5
 underground = Underground(WIDTH, HEIGHT, scroll_speed_underground)
-
+pipeline = Pipeline(WIDTH,HEIGHT,scroll_speed_underground)
 bird = Bird(WIDTH, HEIGHT, underground.height)
 
 # Crea una instancia de la clase Bird
@@ -54,12 +54,13 @@ while running:
     bird.update()
     background.update()
     underground.update()
+    #pipeline.update()
     ####
 
     # Dibuja el fondo
     background.draw(screen)
     underground.draw(screen, HEIGHT)
-
+    pipeline.draw(screen, WIDTH,HEIGHT-underground.height)
     # Dibuja el sprite actual en la ventana
     # Rota el objeto en función del ángulo
     rotated_bird = pygame.transform.rotate(bird.sprites[bird.current_sprite], bird.angle)

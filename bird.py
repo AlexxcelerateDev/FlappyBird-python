@@ -45,6 +45,9 @@ class Bird:
         self.y_velocity += self.gravity  # Aplica la gravedad
         self.y += self.y_velocity  # Actualiza la posición vertical"""
 
+        if self.y <= 0:
+            self.y = 0
+
         # Verifica si el pájaro superaría la altura del suelo en el próximo movimiento hacia abajo
         if self.y + self.y_velocity > self.bottom_limit:
             self.y = self.bottom_limit  # Establece la posición del pájaro en la altura del suelo
