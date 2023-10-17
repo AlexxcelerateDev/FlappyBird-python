@@ -8,25 +8,28 @@ class Bird:
         sprite2 = pygame.image.load(os.path.join(sprites_folder_bird, "bird2.png"))
         sprite3 = pygame.image.load(os.path.join(sprites_folder_bird, "bird3.png"))
 
+        old_width, old_height = sprite1.get_size()
         # Factor de escala para el sprite (puedes ajustar este valor)
-        factor_de_escala = 3  # Por ejemplo, aumenta el tamaño en un 300%
-
+        factor_de_escala_alto = .05*HEIGHT
+        factor_de_escala_ancho = old_width*(factor_de_escala_alto/old_height)  # Por ejemplo, aumenta el tamaño en un 300%
         # Redimensiona las imágenes en función del factor de escala
-        sprite1 = pygame.transform.scale(sprite1, (int(sprite1.get_width() * factor_de_escala), int(sprite1.get_height() * factor_de_escala)))
-        sprite2 = pygame.transform.scale(sprite2, (int(sprite2.get_width() * factor_de_escala), int(sprite2.get_height() * factor_de_escala)))
-        sprite3 = pygame.transform.scale(sprite3, (int(sprite3.get_width() * factor_de_escala), int(sprite3.get_height() * factor_de_escala)))
+        sprite1 = pygame.transform.scale(sprite1, (int(factor_de_escala_ancho), int(factor_de_escala_alto)))
+        sprite2 = pygame.transform.scale(sprite2, (int(factor_de_escala_ancho), int(factor_de_escala_alto)))
+        sprite3 = pygame.transform.scale(sprite3, (int(factor_de_escala_ancho), int(factor_de_escala_alto)))
 
         self.sprites = [sprite1, sprite2, sprite3]  #Sprites que logran la animacion
         self.current_sprite = 0
         self.animation_speed = 100  # Velocidad inicial (en milisegundos)
         self.last_frame_time = pygame.time.get_ticks()  # Tiempo del último cambio de cuadro
-        self.sprite_width, self.sprite_height = self.sprites[self.current_sprite].get_size() 
+
+        self.sprite_width, self.sprite_height = self.sprites[self.current_sprite].get_size() #obtener la anchura y altura
         self.x = (WIDTH - self.sprite_width) // 2  # Centra horizontalmente
         self.y = (HEIGHT - self.sprite_height) // 2  # Centra verticalmente
         
+        self.HEIGHT= HEIGHT
         ####Cosas añadidas
         self.y_velocity = 0  # Velocidad vertical inicial
-        self.gravity = 0.4  # Valor de la gravedad, puedes ajustarlo según tus necesidades"""
+        self.gravity = HEIGHT*0.0008  # Valor de la gravedad, puedes ajustarlo según tus necesidades"""
         self.angle = 0  # Ángulo inicial
         self.current_angle = 0 
         self.bottom_limit = HEIGHT-limit_height-self.sprite_height  # Define el límite inferior de la pantalla
@@ -36,7 +39,7 @@ class Bird:
     def jump(self):
         # Esta función se llama cuando el pájaro salta  # Cambia la velocidad vertical hacia arriba al saltar
         if self.y > self.sprite_height//4:
-            self.y_velocity = -9.5
+            self.y_velocity = -self.HEIGHT*0.015
 
     #Se actualiza en el bucle principal
     def update(self):

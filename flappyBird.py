@@ -25,9 +25,8 @@ background = Background(WIDTH, HEIGHT, scroll_speed)
 # Crea una instancia de la clase Underground
 scroll_speed_underground = scroll_speed *5
 underground = Underground(WIDTH, HEIGHT, scroll_speed_underground)
-pipeline = Pipeline(WIDTH,HEIGHT,scroll_speed_underground)
 bird = Bird(WIDTH, HEIGHT, underground.height)
-
+pipeline = Pipeline(WIDTH,HEIGHT,scroll_speed_underground,underground.height,bird.sprite_height)
 # Crea una instancia de la clase Bird
 
 
@@ -42,6 +41,8 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 bird.jump()  # Llama al método jump cuando se presiona la tecla espacio
+            if event.key == pygame.K_k:
+                pipeline = Pipeline(WIDTH,HEIGHT,scroll_speed_underground,underground.height,bird.sprite_height)
 
 
     # Lógica del juego
@@ -54,13 +55,14 @@ while running:
     bird.update()
     background.update()
     underground.update()
+    pipeline.update()
     #pipeline.update()
     ####
 
     # Dibuja el fondo
     background.draw(screen)
     underground.draw(screen, HEIGHT)
-    pipeline.draw(screen, WIDTH,HEIGHT-underground.height)
+    pipeline.draw(screen, WIDTH)
     # Dibuja el sprite actual en la ventana
     # Rota el objeto en función del ángulo
     rotated_bird = pygame.transform.rotate(bird.sprites[bird.current_sprite], bird.angle)
