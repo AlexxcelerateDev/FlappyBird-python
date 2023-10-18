@@ -36,8 +36,9 @@ class Pipeline:
 
     def update(self):
         self.x -= self.scroll_speed
-        if self.x <= -self.width:
-            self.x = 0
+        #print(self.x)
+        if self.x <= -self.width-self.sprite_width_Top*2:
+            self.scroll_speed = 0
 
     def draw(self, screen, width):
         screen.blit(self.pipelineTop, (self.width+self.sprite_width_Top, 0))
