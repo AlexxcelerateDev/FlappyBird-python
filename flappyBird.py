@@ -28,13 +28,13 @@ background = Background(WIDTH, HEIGHT, scroll_speed)
 scroll_speed_underground = scroll_speed *5
 underground = Underground(WIDTH, HEIGHT, scroll_speed_underground)
 bird = Bird(WIDTH, HEIGHT, underground.height)
-pipeline = Pipeline(WIDTH,HEIGHT,scroll_speed_underground,underground.height,bird.sprite_height)
+pipeline = Pipeline(WIDTH,HEIGHT,scroll_speed_underground,underground.height)
 
 #Arreglo tubos
 pipelines = []
 #Tiempo de generacion de tubos
 tiempo_anterior = pygame.time.get_ticks()  # Tiempo en milisegundos
-intervalo_generacion = 2000  # 5000 milisegundos = 5 segundos
+intervalo_generacion = 2000  # 2000 milisegundos = 2 segundos Genera el tubo inicial
 
 # Bucle principal del juego
 running = True
@@ -47,16 +47,13 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 bird.jump()  # Llama al método jump cuando se presiona la tecla espacio
-            if event.key == pygame.K_k:
-                pipeline = Pipeline(WIDTH,HEIGHT,scroll_speed_underground,underground.height,bird.sprite_height)
-
 
     # Lógica del juego
-    # Lógica para generar algo cada 5 segundos
+    # Lógica para generar tubo cada cierto tiempo
     tiempo_actual = pygame.time.get_ticks()
     if tiempo_actual - tiempo_anterior >= intervalo_generacion:
         # Generar algo aquí (por ejemplo, un nuevo objeto, evento, o acción)
-        pipeline = Pipeline(WIDTH,HEIGHT,scroll_speed_underground,underground.height,bird.sprite_height)
+        pipeline = Pipeline(WIDTH,HEIGHT,scroll_speed_underground,underground.height)
         pipelines.append(pipeline)
         print(len(pipelines))
         # Actualizar el tiempo anterior para el siguiente ciclo
@@ -67,7 +64,7 @@ while running:
     # Dibujar en la pantalla
     screen.fill(WHITE)
     
-    # Lógica de animación
+    # Lógica de animación y movimiento
     bird.update()
     background.update()
     underground.update()
@@ -85,14 +82,14 @@ while running:
 
     if len(pipelines) >= 1:
         for objeto in pipelines:
-            objeto.draw(screen, WIDTH) #Hace que se mueva la tuberia
+            objeto.draw(screen) #Hace que se mueva la tuberia
     #Eleccion entre el de arriba y este:
     """
     for objeto in pipelines:
             objeto.draw(screen, WIDTH) #Hace que se mueva la tuberia
     """
     # Dibuja el sprite actual en la ventana
-    # Rota el objeto en función del ángulo
+    # Rota el pajaro en función del ángulo
     rotated_bird = pygame.transform.rotate(bird.sprites[bird.current_sprite], bird.angle)
     new_rect = rotated_bird.get_rect(center=(bird.x, bird.y))
     screen.blit(rotated_bird, new_rect.center)
