@@ -1,11 +1,3 @@
-""""
-import pygame
-
-background_image_path = "sprites/background/background.png"
-
-background_image = pygame.image.load(background_image_path)
-"""
-
 import pygame
 
 class Background:
