@@ -1,6 +1,6 @@
 import pygame
 import os
-import math 
+
 class Bird:
     def __init__(self, WIDTH, HEIGHT, limit_height):
         # Carga las imágenes (sprites) desde la carpeta
