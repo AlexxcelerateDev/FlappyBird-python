@@ -2,19 +2,27 @@ import pygame
 
 class Underground:
     def __init__(self, window_width, window_height, scroll_speed):
-        self.image = pygame.image.load("sprites/ground.png") #Carga la imagen
-        self.image = pygame.transform.scale(self.image, (window_width, window_height // 6)) #Redimensiona la imagen para que este en el suelo
-        self.width = window_width #Ocupara el ancho de la pantalla
-        self.height = window_height // 6 #Obtendrá solo ese 
-        self.scroll_speed = scroll_speed #La velocidad del suelo
-        self.x = 0  #Posicion que logra efecto del movimiento
-        self.y = window_height - self.height
+        self.image1 = pygame.image.load("sprites/ground.png")
+        self.image2 = pygame.image.load("sprites/ground.png")
+        self.image1 = pygame.transform.scale(self.image1, (window_width, window_height // 6))
+        self.image2 = pygame.transform.scale(self.image2, (window_width, window_height // 6))
+        self.width = window_width
+        self.height = window_height // 6
+        self.scroll_speed = scroll_speed
+        self.x1 = 0
+        self.x2 = self.width - 1  # Ajustar para superponer ligeramente
+        self.y = window_height - self.height - 1
+
     def update(self):
-        self.x -= self.scroll_speed #Mueve el suelo
-        if self.x <= -self.width:
-            self.x = 0 #Vuelve a la posicion inicial
-            
-    #Dibuja dando el efecto del movimiento
-    def draw(self, screen, height):
-        screen.blit(self.image, (self.x, self.y))
-        screen.blit(self.image, (self.x + self.width, self.y))
+        self.x1 -= self.scroll_speed
+        self.x2 -= self.scroll_speed
+
+        if self.x1 <= -self.width:
+            self.x1 = self.x2 + self.width - 1
+
+        if self.x2 <= -self.width:
+            self.x2 = self.x1 + self.width - 1
+
+    def draw(self, screen):
+        screen.blit(self.image1, (self.x1, self.y))
+        screen.blit(self.image2, (self.x2, self.y))

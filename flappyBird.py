@@ -68,7 +68,7 @@ while running:
 
     # Dibuja el fondo
     background.draw(screen)
-    underground.draw(screen, HEIGHT)
+    underground.draw(screen)
     # Dibuja el sprite actual en la ventana
     # Rota el pajaro en función del ángulo
     rotated_bird = pygame.transform.rotate(bird.sprites[bird.current_sprite], bird.angle)
