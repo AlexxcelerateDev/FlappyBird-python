@@ -5,6 +5,7 @@ from bird import Bird
 from background import Background
 from underground import Underground
 from pipeline import Pipeline
+from colisiones import detectar_colisiones,detectar_colisiones_tubos
 # Inicializar Pygame
 pygame.init()
 
@@ -14,13 +15,13 @@ WIDTH, HEIGHT = screen_info.current_w*.3, screen_info.current_h*.7
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Flappybird")
 # Configuración de la pantalla
-
+ 
 # Colores
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 # Colores
 
-# Crea una instancia de la clase Background
+# Crea una instancia de la clase Background #0.0015
 scroll_speed = WIDTH*0.0015
 background = Background(WIDTH, HEIGHT, scroll_speed)
 
@@ -49,18 +50,7 @@ while running:
                 bird.jump()  # Llama al método jump cuando se presiona la tecla espacio
 
     # Lógica del juego
-    # Lógica para generar tubo cada cierto tiempo
-    tiempo_actual = pygame.time.get_ticks()
-    if tiempo_actual - tiempo_anterior >= intervalo_generacion:
-        # Generar algo aquí (por ejemplo, un nuevo objeto, evento, o acción)
-        pipeline = Pipeline(WIDTH,HEIGHT,scroll_speed_underground,underground.height)
-        pipelines.append(pipeline)
-        print(len(pipelines))
-        # Actualizar el tiempo anterior para el siguiente ciclo
-        tiempo_anterior = tiempo_actual
-        intervalo_generacion = random.randint(1000,1500)
-        
-
+    
     # Dibujar en la pantalla
     screen.fill(WHITE)
     
@@ -68,33 +58,45 @@ while running:
     bird.update()
     background.update()
     underground.update()
-    #Todas las tuberias en pantalla se mueven
     for objeto in pipelines:
         objeto.update() #Hace que se mueva la tuberia
-        if(objeto.scroll_speed == 0): #
-            pipelines.remove(objeto)
-    #pipeline.update()
-    ####
+    ##Colisiones
+    detectar_colisiones(bird,underground)
+    for objeto in pipelines:
+        detectar_colisiones_tubos(bird,objeto)
+    ###Colisiones
 
     # Dibuja el fondo
     background.draw(screen)
     underground.draw(screen, HEIGHT)
-
+    # Dibuja el sprite actual en la ventana
+    # Rota el pajaro en función del ángulo
+    rotated_bird = pygame.transform.rotate(bird.sprites[bird.current_sprite], bird.angle)
+    new_rect = rotated_bird.get_rect(center=(bird.x, bird.y))
+    screen.blit(rotated_bird, new_rect.center)
     if len(pipelines) >= 1:
         for objeto in pipelines:
             objeto.draw(screen) #Hace que se mueva la tuberia
     #Eleccion entre el de arriba y este:
     """
     for objeto in pipelines:
-            objeto.draw(screen, WIDTH) #Hace que se mueva la tuberia
+            objeto.draw(screen) #Hace que se mueva la tuberia
     """
-    # Dibuja el sprite actual en la ventana
-    # Rota el pajaro en función del ángulo
-    rotated_bird = pygame.transform.rotate(bird.sprites[bird.current_sprite], bird.angle)
-    new_rect = rotated_bird.get_rect(center=(bird.x, bird.y))
-    screen.blit(rotated_bird, new_rect.center)
-    # Dibuja otros elementos aquí
+    for objeto in pipelines:
+        if(objeto.x <= -objeto.width-objeto.sprite_width_Bottom): #
+            pipelines.remove(objeto)
     
+    # Lógica para generar tubo cada cierto tiempo
+    tiempo_actual = pygame.time.get_ticks()
+    if tiempo_actual - tiempo_anterior >= intervalo_generacion:
+        # Generar algo aquí (por ejemplo, un nuevo objeto, evento, o acción)
+        pipeline = Pipeline(WIDTH,HEIGHT,scroll_speed_underground,underground.height)
+        pipelines.append(pipeline)
+        #print(len(pipelines))
+        # Actualizar el tiempo anterior para el siguiente ciclo
+        tiempo_anterior = tiempo_actual
+        intervalo_generacion = random.randint(1000,1500)
+
     pygame.display.flip()
     clock.tick(60)
 

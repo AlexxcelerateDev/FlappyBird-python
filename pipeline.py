@@ -14,7 +14,7 @@ class Pipeline:
         espacio_entreTubos = espacio_cielo_piso*.3 #Espacio entre ambos tubos donde pasará el pajaro
 
         ###Atributos
-        self.sprite_width_Top, self.sprite_height_Top = self.pipelineBottom.get_size() #Obtiene las dimenciones del tubo arriba
+        self.sprite_width_Top, self.sprite_height_Top = self.pipelineTop.get_size() #Obtiene las dimenciones del tubo arriba
         self.sprite_width_Bottom, self.sprite_height_Bottom = self.pipelineBottom.get_size() #Obtiene las dimenciones del tubo abajo
 
         ###Atributos
@@ -34,18 +34,15 @@ class Pipeline:
         #Rescala el tubo bottom
         self.pipelineBottom = pygame.transform.scale(self.pipelineBottom, (window_width*.1, espacio_cielo_piso-self.min_height+1))
         
-        
+        self.sprite_width_Top, self.sprite_height_Top = self.pipelineTop.get_size() #Obtiene las dimenciones del tubo arriba
+        self.sprite_width_Bottom, self.sprite_height_Bottom = self.pipelineBottom.get_size() #Obtiene las dimenciones del tubo abajo
         #print(self.min_height)
         #print(underground_height)
         #print(self.sprite_height_Bottom)
         self.width = window_width
-
+        
     def update(self):
         self.x -= self.scroll_speed #Mueve la tuberia dando efecto de movimiento
-
-        #Cuando desaparece de la pantalla su velocidad se hace 0 para que posteriormente se elimine la tuberia y ahorrar recursos
-        if self.x <= -self.width-self.sprite_width_Top*2:
-            self.scroll_speed = 0
     
     #Dibuja al inicio derecho de la pantalla para poder avanzar hasta el final
     def draw(self, screen):

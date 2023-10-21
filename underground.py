@@ -8,7 +8,7 @@ class Underground:
         self.height = window_height // 6 #Obtendrá solo ese 
         self.scroll_speed = scroll_speed #La velocidad del suelo
         self.x = 0  #Posicion que logra efecto del movimiento
-
+        self.y = window_height - self.height
     def update(self):
         self.x -= self.scroll_speed #Mueve el suelo
         if self.x <= -self.width:
@@ -16,5 +16,5 @@ class Underground:
             
     #Dibuja dando el efecto del movimiento
     def draw(self, screen, height):
-        screen.blit(self.image, (self.x, height - self.height))
-        screen.blit(self.image, (self.x + self.width, height - self.height))
+        screen.blit(self.image, (self.x, self.y))
+        screen.blit(self.image, (self.x + self.width, self.y))
